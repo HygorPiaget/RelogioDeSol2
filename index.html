@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Fortaleza Shadow Painter</title>
+  <style>
+    body { font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif; margin: 0; }
+    .wrap { max-width: 1100px; margin: 0 auto; padding: 16px; }
+    .row { display: flex; gap: 16px; flex-wrap: wrap; align-items: end; }
+    .field { display: flex; flex-direction: column; gap: 6px; }
+    label { font-size: 14px; color: #333; }
+    input { padding: 8px 10px; font-size: 14px; }
+    button { padding: 9px 14px; font-size: 14px; cursor: pointer; }
+    #angles { margin: 10px 0 16px; }
+    .hr { height: 1px; background: #e5e5e5; margin: 16px 0; }
+    .hint { margin-bottom: 8px; color: #444; }
+    .plot { width: 100%; }
+    #pq, #frame { max-width: 720px; margin: 0 auto; aspect-ratio: 1 / 1; }
+    /* fallback min-heights for older browsers */
+    #pq { min-height: 520px; }
+    #frame { min-height: 520px; }
+
+  </style>
+  <!-- Plotly.js (CDN) -->
+  <script src="https://cdn.plot.ly/plotly-2.27.0.min.js"></script>
+</head>
+<body>
+  <div class="wrap">
+    <h2>Fortaleza: α, β + curva Ā(q,p)=0.5 (clique na curva)</h2>
+
+    <div class="row">
+      <div class="field">
+        <label for="date">Data</label>
+        <input id="date" type="date" />
+      </div>
+
+      <div class="field">
+        <label for="time">Hora (HH:MM)</label>
+        <input id="time" type="time" step="60" value="15:00" />
+      </div>
+
+      <div class="field">
+        <label for="h_pole">Altura do poste h (m)</label>
+        <input id="h_pole" type="number" value="1.0" step="0.1" min="0.1" />
+      </div>
+
+      <button id="btn">Atualizar</button>
+    </div>
+
+    <div id="angles"></div>
+
+    <div id="pq" class="plot"></div>
+
+    <div class="hr"></div>
+
+    <div class="hint">Clique em qualquer ponto do heatmap (ou nas curvas) para escolher (q,p) e ver os raios no quadro:</div>
+    <div id="frame" class="plot"></div>
+  </div>
+
+  <script src="./app.js"></script>
+</body>
+</html>
