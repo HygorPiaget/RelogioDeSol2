@@ -22,6 +22,8 @@
     .grid-container .grid-row { width: 100%; display: flex; flex-direction: row; flex-wrap: nowrap; gap: 0; }
     .grid-container .grid-row .grid-plot { margin: 0 auto; aspect-ratio: 1 / 1; }
 
+    .grid-container .grid-row .grid-column-label { text-align: center; font-size: 14px; }
+    .grid-container .grid-row .grid-row-label { width: 32px; padding: 0; margin: 0; margin-left: -32px; font-size: 14px; display: flex; align-items: center; }
   </style>
   <!-- Plotly.js (CDN) -->
   <script src="https://cdn.plot.ly/plotly-2.27.0.min.js"></script>
@@ -42,9 +44,33 @@
       </div>
 
       <div class="field">
-        <label for="h_pole">Altura do poste h (m)</label>
-        <input id="h_pole" type="number" value="1.0" step="0.1" min="0.1" />
+        <label for="month-min">Mês (min, max, step)</label>
+        <input id="month-min" type="number" value="1" step="1" min="1" max="12" />
+        <input id="month-max" type="number" value="12" step="1" min="1" max="12" />
+        <input id="month-step" type="number" value="1" step="1" min="1" max="12" />
       </div>
+
+      <div class="field">
+        <label for="hour-min">Hora (min, max, step)</label>
+        <input id="hour-min" type="number" value="6" step="1" min="6" max="17" />
+        <input id="hour-max" type="number" value="17" step="1" min="6" max="17" />
+        <input id="hour-step" type="number" value="1" step="1" min="1" max="12" />
+      </div>
+
+      <div class="field">
+        <label for="psel-min">Poste na tela (min, max)</label>
+        <input id="psel-min" type="number" value="0.5" step="0.01" min="0.0" max="1.0" />
+        <input id="psel-max" type="number" value="0.5" step="0.01" min="0.0" max="1.0" />
+      </div>
+
+      <div class="field">
+        <label for="h_pole">Poste (metro)</label>
+        <input id="h_pole" type="number" value="1.0" step="0.1" min="0.1" />
+
+        <label for="a_bar">Divisão da tela</label>
+        <input id="a_bar" type="number" value="0.5" step="0.1" min="0.1" max="0.9" />
+      </div>
+
 
       <button id="btn">Atualizar</button>
       <div id="angles"></div>

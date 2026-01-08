@@ -72,6 +72,19 @@ function frameFigure(qSel, pSel, ta, tb) {
 
 const elGrid = document.getElementById("grid-container");
 
+const elMonthMin = document.getElementById("month-min");
+const elMonthMax = document.getElementById("month-max");
+const elMonthStep = document.getElementById("month-step");
+
+const elHourMin = document.getElementById("hour-min");
+const elHourMax = document.getElementById("hour-max");
+const elHourStep = document.getElementById("hour-step");
+
+const elPselMin = document.getElementById("psel-min");
+const elPselMax = document.getElementById("psel-max");
+
+const elAbar = document.getElementById("a_bar");
+
 // NOTE: this can be improved with binary search on ordered arrays
 function findClosestIdx(vals, val) {
   let minIdx = 0;
@@ -87,27 +100,62 @@ function findClosestIdx(vals, val) {
   return minIdx;
 }
 
+const [HHMIN, HHMAX] = [6, 17];
+const [MMIN, MMAX] = [1, 12];
+const [STEPMIN, STEPMAX] = [1, 12];
+const [PMIN, PMAX] = [0.0, 1.0];
+const MONTHS = ["", "jan", "fev", "mar", "abr", "mai", "jun", "jul", "ago", "sep", "out", "nov", "dez"];
+
 function renderGrid() {
   const [y, d, mm] = [2026, 1, 0];
-  const [pSel, abar] = [0.5, 0.5];
-  const hPole = Number(elHPole.value);
 
-  const [hhMin, hhMax, hhStep] = [6, 17, 1];
-  const [mMin, mMax, mStep] = [1, 12, 1];
-  const mCnt = parseInt((mMax - mMin + 1) / mStep);
+  const hPole = Number(elHPole.value);
+  const abar = clamp(Number(elAbar.value), 0.0, 1.0);
+
+  const pSelMin = clamp(Number(elPselMin.value), PMIN, PMAX);
+  const pSelMax = clamp(Number(elPselMax.value), PMIN, PMAX);
+  const pSelRange = pSelMax - pSelMin;
+
+  const hhMin = clamp(Number(elHourMin.value), HHMIN, HHMAX);
+  const hhMax = clamp(Number(elHourMax.value), HHMIN, HHMAX);
+  const hhStep = clamp(Number(elHourStep.value), STEPMIN, STEPMAX);
+
+  const mMin = clamp(Number(elMonthMin.value), MMIN, MMAX);
+  const mMax = clamp(Number(elMonthMax.value), MMIN, MMAX);
+  const mStep = clamp(Number(elMonthStep.value), STEPMIN, STEPMAX);
+
+  const mCnt = parseInt((hhMax - hhMin + 1) / hhStep);
 
   elGrid.innerHTML = "";
+  const elGridRow = document.createElement("div");
+  elGridRow.classList.add("grid-row");
+  elGrid.appendChild(elGridRow);
+  for (let hh = hhMin; hh <= hhMax; hh += hhStep) {
+    const elColumnLabel = document.createElement("div");
+    elColumnLabel.classList.add("grid-column-label");
+    elColumnLabel.style.width = `${100 / mCnt}%`;
+    elGridRow.appendChild(elColumnLabel);
+    elColumnLabel.innerHTML = `000${hh}:00`.slice(-5);
+  }
 
-  for (let hh = hhMin; hh <= hhMax; hh+=hhStep) {
-    const elHourRow = document.createElement("div");
-    elHourRow.classList.add("grid-row");
-    elGrid.appendChild(elHourRow);
+  for (let m = mMin; m <= mMax; m+=mStep) {
+    const elGridRow = document.createElement("div");
+    elGridRow.classList.add("grid-row");
+    elGrid.appendChild(elGridRow);
 
-    for (let m = mMin; m <= mMax; m+=mStep) {
+    const elRowLabel = document.createElement("div");
+    elRowLabel.classList.add("grid-row-label");
+    elGridRow.appendChild(elRowLabel);
+    elRowLabel.innerHTML = `${MONTHS[m]}`;
+
+    for (let hh = hhMin; hh <= hhMax; hh += hhStep) {
+      const hh01 = (hh - hhMin) / (hhMax - hhMin);
+      const pSel = hh01 * pSelRange + pSelMin;
+
       const elGridPlot = document.createElement("div");
       elGridPlot.classList.add("grid-plot");
       elGridPlot.style.width = `${100 / mCnt}%`;
-      elHourRow.appendChild(elGridPlot);
+      elGridRow.appendChild(elGridPlot);
 
       const out = computeAlphaBeta(y, m, d, hh, mm, hPole);
       if (!isFinite(out.alpha_rad) || !isFinite(out.beta_rad)) continue;
