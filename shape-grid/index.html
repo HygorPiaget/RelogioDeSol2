@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Fortaleza Shadow Painter</title>
+  <style>
+    body { font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif; margin: 0; }
+    .wrap { max-width: 1280px; margin: 0 auto; padding: 16px; }
+    .row { display: flex; gap: 16px; flex-wrap: wrap; align-items: end; }
+    .field { display: flex; flex-direction: column; gap: 6px; }
+    label { font-size: 14px; color: #333; }
+    input { padding: 8px 10px; font-size: 14px; }
+    input[type="color"] { padding: 0; width: 100px; }
+    button { padding: 9px 14px; font-size: 14px; cursor: pointer; }
+    #angles { margin: 10px 0 16px; display: none; }
+
+    #pq, #frame { max-width: 720px; margin: 0 auto; aspect-ratio: 1 / 1; display: none; }
+
+    .field.hide { width: 0; opacity: 0; display: none; }
+
+    .grid-container { width: 100%; margin: 32px 0; }
+    .grid-container .grid-row { width: 100%; display: flex; flex-direction: row; flex-wrap: nowrap; gap: 0; }
+    .grid-container .grid-row .grid-plot { margin: 1px; border: 2px #000 solid; aspect-ratio: 1 / 1; }
+    .grid-container .grid-row .grid-plot .plot-shape { margin: 0; padding: 0; width: 100%; height: 100%; }
+
+    .grid-container .grid-row .grid-column-label { text-align: center; font-size: 14px; }
+    .grid-container .grid-row .grid-row-label { width: 32px; padding: 0; margin: 0; margin-left: -32px; font-size: 14px; display: flex; align-items: center; }
+  </style>
+  <!-- Plotly.js (CDN) -->
+  <script src="https://cdn.plot.ly/plotly-2.27.0.min.js"></script>
+</head>
+<body>
+  <div class="wrap">
+    <h2>Fortaleza: α, β + curva Ā(q,p)=0.5</h2>
+
+    <div class="row">
+      <div class="field hide">
+        <label for="date">Data</label>
+        <input id="date" type="date" />
+      </div>
+
+      <div class="field hide">
+        <label for="time">Hora (HH:MM)</label>
+        <input id="time" type="time" step="60" value="15:00" />
+      </div>
+
+      <div class="field">
+        <label for="month-min">Mês (min, max, step)</label>
+        <input id="month-min" type="number" value="1" step="1" min="1" max="12" />
+        <input id="month-max" type="number" value="12" step="1" min="1" max="12" />
+        <input id="month-step" type="number" value="1" step="1" min="1" max="12" />
+      </div>
+
+      <div class="field">
+        <label for="hour-min">Hora (min, max, step)</label>
+        <input id="hour-min" type="number" value="6" step="1" min="6" max="17" />
+        <input id="hour-max" type="number" value="17" step="1" min="6" max="17" />
+        <input id="hour-step" type="number" value="1" step="1" min="1" max="12" />
+      </div>
+
+      <div class="field">
+        <label for="psel-min">Poste na tela (min, max)</label>
+        <input id="psel-min" type="number" value="0.5" step="0.01" min="0.0" max="1.0" />
+        <input id="psel-max" type="number" value="0.5" step="0.01" min="0.0" max="1.0" />
+      </div>
+
+      <div class="field">
+        <label for="h_pole">Poste (metro)</label>
+        <input id="h_pole" type="number" value="1.0" step="0.1" min="0.1" />
+
+        <label for="a_bar">Divisão da tela</label>
+        <input id="a_bar" type="number" value="0.5" step="0.1" min="0.1" max="0.9" />
+      </div>
+
+      <div class="field">
+        <label for="l_color">Cor Luz</label>
+        <input id="l_color" type="color" value="#ffffff" />
+
+        <label for="s_color">Cor Sombra</label>
+        <input id="s_color" type="color" value="#444444" />
+      </div>
+
+      <button id="btn">Atualizar</button>
+      <div id="angles"></div>
+    </div>
+
+    <div id="grid-container" class="grid-container"></div>
+
+    <div id="pq" class="plot"></div>
+    <div id="frame" class="plot"></div>
+  </div>
+
+  <script src="../app.js"></script>
+  <script src="./app.js"></script>
+</body>
+</html>
