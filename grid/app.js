@@ -11,9 +11,7 @@
 // ----------------------------
 // Frame plot (two rays inside 1x1)
 // ----------------------------
-function frameFigure(qSel, pSel, ta, tb) {
-  const q = Number(qSel);
-  const p = Number(pSel);
+function frameFigure(q, p, ta, tb) {
   const u = 1 - p;
 
   const n = 300;

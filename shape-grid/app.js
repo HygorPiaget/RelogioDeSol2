@@ -8,9 +8,7 @@
 
 "use strict";
 
-function shadeClipPath(qSel, pSel, ta, tb) {
-  const q = Number(qSel);
-  const p = Number(pSel);
+function getLineEndpoints(q, p, ta, tb) {
   const u = 1 - p;
 
   const n = 300;
@@ -48,50 +46,78 @@ function shadeClipPath(qSel, pSel, ta, tb) {
     etaS.push(eta);
   }
 
-  const L0 = [xi1[ky1], etaL[ky1]];
-  const Ln = [xi1[n - 1], etaL[n - 1]];
+  const L0 = { x: xi1[ky1], y: etaL[ky1] };
+  const Ln = { x: xi1[n - 1], y: etaL[n - 1] };
 
-  const S0 = [xi2[0], etaS[0]];
-  const Sn = [xi2[n-1], etaS[n-1]];
+  const Sn = { x: xi2[0], y: etaS[0]} ;
+  const S1 = { x: xi2[n - 1], y: etaS[n - 1] };
 
+  return { L0, Ln, Sn, S1 };
+}
+
+function shadeClipPath(q, p, ta, tb) {
+  const { L0, Ln, Sn, S1 } = getLineEndpoints(q, p, ta, tb);
 
   // Left shape
   const Lclip = [];
 
-  if (L0[1] > 0.9999999) {
+  if (L0.x > 1e-12) {
     Lclip.push("0% calc(100% - 100%)");
   }
 
-  Lclip.push(`${(L0[0] * 100).toFixed(3)}% ${(100 - L0[1] * 100).toFixed(3)}%`);
-  Lclip.push(`${(Ln[0] * 100).toFixed(3)}% ${(100 - Ln[1] * 100).toFixed(3)}%`);
-  Lclip.push(`${(S0[0] * 100).toFixed(3)}% ${(100 - S0[1] * 100).toFixed(3)}%`);
-  Lclip.push(`${(Sn[0] * 100).toFixed(3)}% ${(100 - Sn[1] * 100).toFixed(3)}%`);
+  Lclip.push(`${(L0.x * 100).toFixed(3)}% ${(100 - L0.y * 100).toFixed(3)}%`);
+  Lclip.push(`${(Ln.x * 100).toFixed(3)}% ${(100 - Ln.y * 100).toFixed(3)}%`);
+  Lclip.push(`${(Sn.x * 100).toFixed(3)}% ${(100 - Sn.y * 100).toFixed(3)}%`);
+  Lclip.push(`${(S1.x * 100).toFixed(3)}% ${(100 - S1.y * 100).toFixed(3)}%`);
 
-  if (Sn[1] > 1e-12) {
+  if (S1.y > 1e-12) {
     Lclip.push("100% calc(100% - 0%)");
   }
 
   Lclip.push("0% calc(100% - 0%)");
 
-  // Right shape
-  const Rclip = [];
-
-  Rclip.push(`${(L0[0] * 100).toFixed(3)}% ${(100 - L0[1] * 100).toFixed(3)}%`);
-  Rclip.push(`${(Ln[0] * 100).toFixed(3)}% ${(100 - Ln[1] * 100).toFixed(3)}%`);
-  Rclip.push(`${(S0[0] * 100).toFixed(3)}% ${(100 - S0[1] * 100).toFixed(3)}%`);
-  Rclip.push(`${(Sn[0] * 100).toFixed(3)}% ${(100 - Sn[1] * 100).toFixed(3)}%`);
-
-  if (Sn[0] < 1) {
-    Rclip.push("100% calc(100% - 0%)");
-  }
-
-  Rclip.push("100% calc(100% - 100%)");
-
-  if (L0[0] < 1e-12) {
-    Rclip.push("0% calc(100% - 100%)");
-  }
-
   return Lclip.join(",");
+}
+
+function calculateLeftArea(q, p, ta, tb) {
+  const { L0, Ln, Sn, S1 } = getLineEndpoints(q, p, ta, tb);
+
+  // left + bottom
+  if (L0.x < 1e-9 && S1.x < 1.0) {
+    const larea =
+      Ln.x * Ln.y +
+      0.5 * Ln.x * (L0.y - Ln.y) +
+      0.5 * (S1.x - Sn.x) * Sn.y;
+    return larea;
+  }
+  // top + right
+  else if (L0.x > 0 && S1.y > 1e-9) {
+    const larea =
+      Ln.x * Ln.y +
+      0.5 * (Ln.x - L0.x) * (L0.y - Ln.y) +
+      0.5 * (S1.x - Sn.x) * (Sn.y - S1.y) +
+      L0.x * (L0.y - Ln.y) +
+      (S1.x - Sn.x) * S1.y;
+    return larea;
+  }
+  // left + right
+  else if (L0.x < 1e-9 && S1.y > 1e-9) {
+    const larea =
+      Ln.x * Ln.y +
+      0.5 * Ln.x * (L0.y - Ln.y) +
+      0.5 * (S1.x - Sn.x) * (Sn.y - S1.y) +
+      (S1.x - Sn.x) * S1.y;
+    return larea;
+  }
+  // top + bottom
+  else {
+    const larea =
+      Ln.x * Ln.y +
+      0.5 * (S1.x - Sn.x) * Sn.y +
+      0.5 * (Ln.x - L0.x) * (L0.y - Ln.y) +
+      L0.x * (L0.y - Ln.y);
+    return larea;
+  }
 }
 
 const elGrid = document.getElementById("grid-container");
@@ -197,6 +223,16 @@ function renderGrid() {
       const qSel = qVals[qIdx];
 
       const clipPath = shadeClipPath(qSel, pSel, ta, tb);
+      const leftArea = calculateLeftArea(qSel, pSel, ta, tb);
+      const abarV = abarValue(qSel, pSel, ta, tb);
+
+      if (Math.abs(leftArea - abarV) > 0.01) {
+        console.log("OOPS. left area and abar value are DIFFERENT!");
+      }
+
+      if (Math.abs(leftArea - abar) > 0.05) {
+        console.log(`Oops. Wanted ${abar}, but got ${leftArea}.`, y, m, d, hh, mm, hPole);
+      }
 
       const elShape = document.createElement("div");
       elShape.classList.add("plot-shape");
