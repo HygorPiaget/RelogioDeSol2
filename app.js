@@ -11,8 +11,8 @@
 // ----------------------------
 // Fixed location: Fortaleza
 // ----------------------------
-const LAT_DEG = -3.731862;
-const LON_DEG = -38.526669;
+const LAT_DEG = -3.731862;  //  -3° 43' 54.70"
+const LON_DEG = -38.526669; // -38° 31' 36.01"
 const TZ_OFFSET_HOURS = -3.0;
 
 // Matplotlib-like OrRd colorscale (light orange -> dark red)
@@ -145,7 +145,7 @@ function computeAlphaBeta(localY, localM, localD, localHH, localMM, hPole) {
     return {
       azimuth_deg: Adeg, elevation_deg: Edeg,
       alpha_rad: NaN, beta_rad: NaN, alpha_deg: NaN, beta_deg: NaN,
-      shadow_length_m: NaN, rho_m: NaN
+      shadow_length_m: NaN
     };
   }
 
@@ -156,20 +156,15 @@ function computeAlphaBeta(localY, localM, localD, localHH, localMM, hPole) {
   const z_up = Math.sin(E);
 
   const alpha = Math.atan2(z_up, Math.abs(x_east) + EPS);
+  const beta = Math.atan(Math.abs(EYE_H * Math.cos(A)) / Math.abs(D_OBS * Math.sin(A)));
 
   const s = hPole / Math.tan(E);
-
-  const x_tip = -s * Math.sin(A);
-  const y_tip = -s * Math.cos(A);
-
-  const rho = Math.sqrt(x_tip * x_tip + Math.pow(y_tip - D_OBS, 2));
-  const beta = Math.atan2(EYE_H, rho + EPS);
 
   return {
     azimuth_deg: Adeg, elevation_deg: Edeg,
     alpha_rad: alpha, beta_rad: beta,
     alpha_deg: rad2deg(alpha), beta_deg: rad2deg(beta),
-    shadow_length_m: s, rho_m: rho
+    shadow_length_m: s
   };
 }
 
