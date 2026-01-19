@@ -163,7 +163,8 @@ function computeAlphaBeta(localY, localM, localD, localHH, localMM, hPole) {
   const y_tip = -s * Math.cos(A);
 
   const rho = Math.sqrt(x_tip * x_tip + Math.pow(y_tip - D_OBS, 2));
-  const beta = Math.atan2(EYE_H, rho + EPS);
+  //const beta = Math.atan2(EYE_H, rho + EPS);
+  const beta = Math.atan( Math.abs(EYE_H * Math.cos(A)) / Math.abs(D_OBS * Math.sin(A)));
 
   return {
     azimuth_deg: Adeg, elevation_deg: Edeg,
