@@ -1,0 +1,90 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Poste & Sombra 3D — Fortaleza</title>
+    <style>
+      :root{ --bg:#0b0f14; --fg:#e8f0fe; --muted:#a9bbcf; --line:#1b2a3a; }
+      html,body{ margin:0; height:100%; background:var(--bg); color:var(--fg); box-sizing: border-box; font:14px/1.4 system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Cantarell,"Helvetica Neue",Arial,"Noto Sans",sans-serif; }
+      .wrap{ display:grid; grid-template-columns: 320px 1fr; gap:12px; height:100%; }
+      .panel{ padding:12px; border-right:1px solid var(--line); }
+      h1{ font-size:18px; margin:0 0 8px; }
+      fieldset{ border:1px solid var(--line); border-radius:10px; padding:10px; margin:0 0 10px; }
+      legend{ color:var(--muted); padding:0 6px; }
+      label{ display:block; margin:8px 0 2px; color:#cfe1ff; }
+      input{ max-width: 120px; padding:8px; border-radius:8px; border:1px solid var(--line); background:#0f141b; color:var(--fg); }
+      .row{ display:grid; grid-template-columns: 1fr 1fr; gap:8px; }
+      .small{ color:var(--muted); font-size:12px; }
+      .stat{ display:grid; grid-template-columns: auto 1fr; gap:8px; padding:4px 0; }
+      .stat span:first-child{ color:var(--muted); }
+      #view{ position:relative; height:100vh; min-height:360px; }
+      #renderer{ width:100%; height:100%; display:block; }
+      .legend{ font-size:12px; color:var(--muted); }
+      .legend .n{ color:#6aa5ff; }
+      .legend .e{ color:#89c46a; }
+      .legend .s{ color:#ff4d4d; }
+      .legend .l{ color:#ffe28a; }
+      .hide { display: none; }
+    </style>
+    <!-- To enable JS reuse without errors -->
+    <script src="https://cdn.plot.ly/plotly-2.27.0.min.js"></script>
+  </head>
+  <body>
+    <div class="wrap">
+      <div class="panel">
+        <h1>Poste & Sombra 3D — Fortaleza</h1>
+        <p class="small">
+          Fortaleza (UTC-3)<br>
+          Latitude: <code>-3.7304</code>, Longitude: <code>-38.5218</code></p>
+
+        <fieldset>
+          <legend>Parameters</legend>
+          <div class="row">
+            <div>
+              <label>Date</label>
+              <input id="date" type="date" />
+            </div>
+            <div>
+              <label>Time (UTC-3)</label>
+              <input id="time" type="time" step="60" value="08:00" />
+            </div>
+          </div>
+          <div class="row">
+            <div>
+              <label>Pole Length (m)</label>
+              <input id="hpost" type="number" step="0.1" value="1.0" />
+            </div>
+          </div>
+        </fieldset>
+
+        <fieldset>
+          <legend>Results</legend>
+          <div class="stat"><span>Azimuth</span><b id="outAz">—</b></div>
+          <div class="stat"><span>Elevation</span><b id="outEl">—</b></div>
+          <div class="stat"><span>Shadow Length</span><b id="outLen">—</b></div>
+          <p class="legend">
+            <span class="n">North</span>&emsp;&emsp;&emsp;
+            <span class="e">East</span><br>
+            <span class="l">Sun Light</span>&emsp;&thinsp;
+            <span class="s">Shadow</span>
+          </p>
+        </fieldset>
+      </div>
+
+      <div id="view">
+        <canvas id="renderer"></canvas>
+      </div>
+    </div>
+
+    <!-- To enable JS reuse without errors -->
+    <div class="hide">
+      <div id="pq"></div><div id="frame"></div>
+      <div id="btn"></div><div id="h_pole"></div>
+      <div id="angles"></div>
+    </div>
+
+    <script src="../app.js"></script>
+    <script src="./app.js" type="module"></script>
+  </body>
+</html>
