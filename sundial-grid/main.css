@@ -1,0 +1,157 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+:root {
+  --color-bg: #fff;
+  --color-bg-hl: #fafafa;
+  --color-text: #222;
+  --color-hl-0: #edff00;
+  --color-hl-1: #4c7f2a;
+  --color-hl-2: #222324;
+  --color-hl-3: #929293;
+  font-size: 15px;
+}
+
+html, body {
+  background-color: var(--color-bg);
+  color: var(--color-text);
+  font-family: sans-serif;
+}
+
+body {
+  width: 80%;
+  display: block;
+  margin: 0 auto;
+}
+
+input {
+  font-family: sans-serif;
+}
+
+.panel-title {
+  margin-bottom: 3rem;
+}
+
+.sub-section {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  text-align: left;
+  margin-bottom: 2rem;
+  
+  &:last-of-type {
+    padding-bottom: 4rem;
+  }
+}
+
+.sundial-view {
+  width: 100%;
+  --color-light: var(--color-hl-0);
+  --color-shade: var(--color-hl-2);
+
+  .sundial-menu {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: end;
+    justify-content: flex-start;
+    gap: 16px;
+    margin: 0;
+
+    .field {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      flex-grow: 1;
+      max-width: 160px;
+
+      .hide {
+        opacity: 0;
+        height: 0;
+        pointer-events: none;
+        user-select: none;
+      }
+    }
+
+    label {
+      font-size: 14px;
+      color: #333;
+    }
+
+    input {
+      padding: 8px 10px;
+      font-size: 14px;
+    }
+
+    input[type="date"],
+    input[type="time"] {
+      font-family: sans-serif;
+    }
+
+    input[type="color"] {
+      padding: 4px;
+      width: 100px;
+    }
+
+    button {
+      width: 100px;
+      padding: 9px 14px;
+      font-size: 14px;
+      cursor: pointer;
+    }
+  }
+
+  .sundial-3d-container,
+  .sundial-grid-container {
+    width: 100%;
+    margin: 2rem 0 0;
+  }
+
+  .sundial-3d-container {
+    .sundial-3d-renderer {
+      display: block;
+      width: 100%;
+    }
+  }
+
+  .sundial-grid-container {
+    .grid-row {
+      width: 100%;
+      display: flex;
+      flex-direction: row;
+      flex-wrap: nowrap;
+      gap: 0;
+
+      .grid-plot {
+        margin: 1px;
+        border: 2px #000 solid;
+        aspect-ratio: 1 / 1;
+
+        .plot-shape {
+          margin: 0;
+          padding: 0;
+          width: 100%;
+          height: 100%;
+        }
+      }
+
+      .grid-column-label {
+        text-align: center;
+        font-size: 14px;
+      }
+
+      .grid-row-label {
+        width: 32px;
+        padding: 0;
+        margin: 0;
+        margin-left: -32px;
+        font-size: 14px;
+        display: flex;
+        align-items: center;
+        transform: rotate(-90deg);
+      }
+    }
+  }
+}

@@ -1,0 +1,115 @@
+<!doctype html>
+<html lang="en">
+
+  <head>
+    <link rel="stylesheet" href="./main.css" />
+  </head>
+
+  <body>
+    <h2 class="panel-title">How Does Solar Incidence Shape a City?</h2>
+
+    <div class="sub-section">
+      <div class="sundial-view">
+        <div class="sundial-menu">
+          <div class="field">
+            <label for="sundial-city">City</label>
+            <input id="sundial-city" value="Fortaleza" />
+          </div>
+
+          <div class="field">
+            <label for="sundial-lat">Latitude</label>
+            <input id="sundial-lat" type="number" />
+          </div>
+
+          <div class="field">
+            <label for="sundial-lon">Longitude</label>
+            <input id="sundial-lon" type="number" />
+          </div>
+
+          <div class="field">
+            <label for="sundial-tz"><a href="https://www.google.com/search?q=utc+offset+fortaleza" target="_blank">UTC Offset</a></label>
+            <input id="sundial-tz" type="number" />
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="sub-section">
+      <div class="sundial-view">
+        <div class="sundial-menu">
+          <div class="field">
+            <label for="sundial-3d-date">Date</label>
+            <input id="sundial-3d-date" type="date" />
+          </div>
+
+          <div class="field">
+            <label for="sundial-3d-time">Time</label>
+            <input id="sundial-3d-time" type="time" step="60" value="08:00" />
+          </div>
+
+          <div class="field">
+            <label for="sundial-3d-pole">Pole Length (m)</label>
+            <input id="sundial-3d-pole" type="number" step="0.1" value="1.0" />
+          </div>
+        </div>
+
+        <div id="sundial-3d-container" class="sundial-3d-container">
+          <canvas id="sundial-3d-renderer" class="sundial-3d-renderer"></canvas>
+        </div>
+      </div>
+    </div>
+
+    <div class="sub-section">
+      <div class="sundial-view">
+        <div class="sundial-menu">
+          <div class="field">
+            <label for="sundial-grid-month-min">Months (min, max, step)</label>
+            <input id="sundial-grid-month-min" type="number" value="1" step="1" min="1" max="12" />
+            <input id="sundial-grid-month-max" type="number" value="12" step="1" min="1" max="12" />
+            <input id="sundial-grid-month-step" type="number" value="1" step="1" min="1" max="12" />
+          </div>
+
+          <div class="field">
+            <label for="sundial-grid-hour-min">Hours (min, max, step)</label>
+            <input id="sundial-grid-hour-min" type="number" value="6" step="1" min="6" max="17" />
+            <input id="sundial-grid-hour-max" type="number" value="17" step="1" min="6" max="17" />
+            <input id="sundial-grid-hour-step" type="number" value="1" step="1" min="1" max="12" />
+          </div>
+
+          <div class="field">
+            <label for="psel-min">Pole Variation (min, max)</label>
+            <input id="psel-min" type="number" value="0.5" step="0.01" min="0.0" max="1.0" />
+            <input id="psel-max" type="number" value="0.5" step="0.01" min="0.0" max="1.0" />
+          </div>
+
+          <div class="field">
+            <label class="hide" for="sundial-grid-pole">Pole Length (m)</label>
+            <input class="hide" id="sundial-grid-pole" type="number" value="1.0" step="0.1" min="0.1" />
+
+            <label for="a_bar">Light/Shade Ratio</label>
+            <input id="a_bar" type="number" value="0.5" step="0.1" min="0.1" max="0.9" />
+          </div>
+
+          <div class="field">
+            <label for="l_color">Light</label>
+            <input id="l_color" type="color" value="#ffffff" />
+
+            <label for="s_color">Shade</label>
+            <input id="s_color" type="color" value="#444444" />
+          </div>
+
+          <div class="field">
+            <button id="sundial-grid-update-button">Update</button>
+          </div>
+        </div>
+
+        <div id="sundial-grid-container" class="sundial-grid-container"></div>
+      </div>
+    </div>
+
+    <script src="./js/sundial-math.js"></script>
+    <script src="./js/sundial-3d.js" type="module"></script>
+    <script src="./js/sundial-grid.js"></script>
+  </body>
+
+</html>
